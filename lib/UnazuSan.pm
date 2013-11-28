@@ -7,7 +7,7 @@ our $VERSION = "0.02";
 
 use AnySan;
 use AnySan::Provider::IRC;
-use Encode qw/decode_utf8/;
+use Encode qw/decode/;
 
 sub new {
     my $class = shift;
@@ -16,6 +16,7 @@ sub new {
 
     $self->{nickname}           //= 'unazu_san';
     $self->{port}               ||= 6667;
+    $self->{encode}             ||= 'utf8';
     $self->{post_interval}      //= 2;
     $self->{reconnect_interval} //= 3;
 
@@ -62,7 +63,7 @@ sub new {
         echo => {
             cb => sub {
                 my $receive = shift;
-                $receive->{message} = decode_utf8 $receive->{message};
+                $receive->{message} = decode( $self->{encode},$receive->{message} );
                 $self->_respond($receive);
             }
         }
