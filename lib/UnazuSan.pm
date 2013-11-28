@@ -135,7 +135,7 @@ use Encode qw/encode_utf8/;
 
 sub reply {
     my ($self, $msg) = @_;
-    $self->send_reply(encode_utf8 $msg);
+    $self->send_reply(encode($self->{encode}, $msg));
 }
 
 1;
